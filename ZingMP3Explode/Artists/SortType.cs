@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace ZingMP3Explode
+namespace ZingMP3Explode.Artists
 {
-    public class Class1
+    public enum SortType
     {
+        Popular,
+        Newest,
     }
 }

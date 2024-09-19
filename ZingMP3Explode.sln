@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.8.34525.116
+VisualStudioVersion = 17.12.35209.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZingMP3Explode", "ZingMP3Explode.csproj", "{9112465F-2E7A-4983-948F-EA6577790410}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZingMP3Explode", "ZingMP3Explode\ZingMP3Explode.csproj", "{ACB5B3A7-F8CB-4D53-8950-2A982BAECF9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZingMP3Explode.Tests", "ZingMP3Explode.Tests\ZingMP3Explode.Tests.csproj", "{BFA92DC2-51BF-4E5E-95B6-AB77B8C1A498}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZingMP3Explode.Demo", "ZingMP3Explode.Demo\ZingMP3Explode.Demo.csproj", "{94C24589-3FF6-4E94-96D8-A8FC47610050}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +15,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9112465F-2E7A-4983-948F-EA6577790410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9112465F-2E7A-4983-948F-EA6577790410}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9112465F-2E7A-4983-948F-EA6577790410}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9112465F-2E7A-4983-948F-EA6577790410}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACB5B3A7-F8CB-4D53-8950-2A982BAECF9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACB5B3A7-F8CB-4D53-8950-2A982BAECF9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACB5B3A7-F8CB-4D53-8950-2A982BAECF9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACB5B3A7-F8CB-4D53-8950-2A982BAECF9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFA92DC2-51BF-4E5E-95B6-AB77B8C1A498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFA92DC2-51BF-4E5E-95B6-AB77B8C1A498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFA92DC2-51BF-4E5E-95B6-AB77B8C1A498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFA92DC2-51BF-4E5E-95B6-AB77B8C1A498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94C24589-3FF6-4E94-96D8-A8FC47610050}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94C24589-3FF6-4E94-96D8-A8FC47610050}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94C24589-3FF6-4E94-96D8-A8FC47610050}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94C24589-3FF6-4E94-96D8-A8FC47610050}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {7633856F-056E-4DB6-A1C7-A986134CD628}
+		SolutionGuid = {E659ABF2-31D1-42A6-B132-E3742CCC4D13}
 	EndGlobalSection
 EndGlobal
