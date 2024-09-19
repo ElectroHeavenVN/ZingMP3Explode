@@ -19,6 +19,9 @@ using System.Text.Json;
 using ZingMP3Explode.Exceptions;
 using System.Collections.Generic;
 using ZingMP3Explode.Cookies;
+using ZingMP3Explode.User;
+
+//2do: https://zingmp3.vn/zing-chart
 
 namespace ZingMP3Explode
 {
@@ -87,6 +90,8 @@ namespace ZingMP3Explode
 
         public SearchClient Search { get; private set; }
 
+        public UserClient CurrentUser { get; private set; }
+
         void InitializeClients()
         {
             Songs = new SongClient(endpoint);
@@ -96,6 +101,7 @@ namespace ZingMP3Explode
             Videos = new VideoClient(endpoint);
             Genres = new GenreClient(endpoint);
             Search = new SearchClient(endpoint);
+            CurrentUser = new UserClient(endpoint);
         }
 
         /// <summary>
@@ -170,7 +176,7 @@ namespace ZingMP3Explode
             if (!httpResponse.IsSuccessStatusCode)
                 throw new ZingMP3ExplodeException($"Failed to verify client. Status code: {httpResponse.StatusCode}");
             resolvedJson = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            CheckErrorCode(resolvedJson, out _);
+            Utils.CheckZaloErrorCode(resolvedJson, out _);
             request = GetHttpRequestMessage("/account/authen/qr/generate", new Dictionary<string, string?>
             {
                 { "continue", Constants.ZINGMP3_LINK + "?isZaloPopupLogin=1" },
@@ -180,7 +186,7 @@ namespace ZingMP3Explode
             if (!httpResponse.IsSuccessStatusCode)
                 throw new ZingMP3ExplodeException($"Failed to fetch QR code. Status code: {httpResponse.StatusCode}");
             resolvedJson = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZaloErrorCode(resolvedJson, out JsonNode node);
             QRCodeAuthentication? auth = node.Deserialize<QRCodeAuthentication>(JsonDefaults.Options);
             if (auth == null)
                 throw new JsonException("Failed to deserialize QR code authentication response.");
@@ -195,7 +201,7 @@ namespace ZingMP3Explode
             if (!httpResponse.IsSuccessStatusCode)
                 throw new ZingMP3ExplodeException($"Failed to wait for user to scan the QR code. Status code: {httpResponse.StatusCode}");
             resolvedJson = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            CheckErrorCode(resolvedJson, out node);
+            Utils.CheckZaloErrorCode(resolvedJson, out node);
             QRCodeAuthenticationUser? user = node.Deserialize<QRCodeAuthenticationUser>(JsonDefaults.Options);
             if (user == null)
                 throw new JsonException("Failed to deserialize QR code authentication user response.");
@@ -212,7 +218,7 @@ namespace ZingMP3Explode
             if (!httpResponse.IsSuccessStatusCode)
                 throw new ZingMP3ExplodeException($"Failed to wait for user confirmation. Status code: {httpResponse.StatusCode}");
             resolvedJson = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            CheckErrorCode(resolvedJson, out _);
+            Utils.CheckZaloErrorCode(resolvedJson, out _);
             httpResponse = await httpClient.GetAsync(Constants.ID_ZALO_LINK.TrimEnd('/') + "/account/checksession?continue=" + Uri.EscapeDataString(Constants.ZINGMP3_LINK + "?isZaloPopupLogin=1"), cancellationToken);
             if (!httpResponse.IsSuccessStatusCode)
                 throw new ZingMP3ExplodeException($"Failed to check for the session. Status code: {httpResponse.StatusCode}");
@@ -236,17 +242,6 @@ namespace ZingMP3Explode
             foreach (Cookie cookie in cookieContainer.GetAllCookies())
                 cookies.Add(ZingMP3Cookie.FromCookie(cookie));
             return cookies;
-        }
-
-        static void CheckErrorCode(string json, out JsonNode node)
-        {
-            node = JsonNode.Parse(json);
-            int errorCode = node["error_code"].GetValue<int>();
-            if (errorCode != 0)
-                throw new ZingMP3ExplodeException(errorCode, node["error_message"].GetValue<string>());
-            if (!node.AsObject().ContainsKey("data"))
-                throw new ZingMP3ExplodeException("The API does not return any data");
-            node = node["data"];
         }
     }
 }

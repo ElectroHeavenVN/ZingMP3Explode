@@ -57,7 +57,7 @@ namespace ZingMP3Explode.Videos
             };
             var resolvedJson = await endpoint.GetAsync("/api/v2/page/get/video", parameters, cancellationToken);
 
-            Utils.CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZingErrorCode(resolvedJson, out JsonNode node);
             return node.Deserialize<Video>(JsonDefaults.Options);
         }
 
@@ -77,7 +77,7 @@ namespace ZingMP3Explode.Videos
                 { "id", id }
             };
             var resolvedJson = await endpoint.GetAsync("/api/v2/video/get/section-relate", parameters, cancellationToken);
-            Utils.CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZingErrorCode(resolvedJson, out JsonNode node);
             JsonSerializerOptions options = JsonDefaults.Options;
             options.Converters.Add(new SectionJSONConverter<IncompleteVideo>());
             return node.Deserialize<Section>(options);

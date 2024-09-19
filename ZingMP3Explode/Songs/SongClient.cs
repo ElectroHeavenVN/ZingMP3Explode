@@ -54,6 +54,7 @@ namespace ZingMP3Explode.Songs
             return await GetByIdAsync(id, cancellationToken);
         }
 
+        // API return more information: /api/v2/song/get/info?id=...&ctime=...
         public async ValueTask<Song?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
             if (!idRegex.IsMatch(id))
@@ -63,7 +64,7 @@ namespace ZingMP3Explode.Songs
                 { "id", id }
             };
             var resolvedJson = await endpoint.GetAsync("/api/v2/page/get/song", parameters, cancellationToken);
-            Utils.CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZingErrorCode(resolvedJson, out JsonNode node);
             return node.Deserialize<Song>(JsonDefaults.Options);
         }
 
@@ -89,7 +90,7 @@ namespace ZingMP3Explode.Songs
                 { "id", id }
             };
             var resolvedJson = await endpoint.GetAsync("/api/v2/song/get/streaming", parameters, cancellationToken);
-            Utils.CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZingErrorCode(resolvedJson, out JsonNode node);
 
             string normalQuality = "";
             string highQuality = "";
@@ -133,7 +134,7 @@ namespace ZingMP3Explode.Songs
                 { "id", id }
             };
             var resolvedJson = await endpoint.GetAsync("/api/v2/song/get/streaming", parameters, cancellationToken);
-            Utils.CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZingErrorCode(resolvedJson, out JsonNode node);
             Dictionary<AudioQuality, string> result = new Dictionary<AudioQuality, string>();
             if (node.AsObject().ContainsKey("128"))
                 result.Add(AudioQuality.Normal, node["128"].GetValue<string>());
@@ -153,7 +154,7 @@ namespace ZingMP3Explode.Songs
                 { "id", id }
             };
             var resolvedJson = await endpoint.GetAsync("/api/v2/lyric/get/lyric", parameters, cancellationToken);
-            Utils.CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZingErrorCode(resolvedJson, out JsonNode node);
             LyricData? lyricData = node.Deserialize<LyricData>(JsonDefaults.Options);
             if (lyricData.File != null)
             {

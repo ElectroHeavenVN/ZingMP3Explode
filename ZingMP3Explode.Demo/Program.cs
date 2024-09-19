@@ -56,6 +56,8 @@ namespace ZingMP3Explode.Demo
                 });
                 File.WriteAllText("credentials.json", JsonSerializer.Serialize(client.GetCookies(), new JsonSerializerOptions() { WriteIndented = true }));
             }
+            var currentUser = await client.CurrentUser.GetAsync();
+            await Console.Out.WriteLineAsync($"Logged in successfully! Current user: {currentUser.DisplayName}");
         }
 
         static async Task GetSongInformationAsync()
@@ -72,7 +74,7 @@ namespace ZingMP3Explode.Demo
             string mp3Link = await client.Songs.GetAudioStreamLinkAsync(song.Id);
             await Console.Out.WriteLineAsync($"MP3 link: {mp3Link}");
             //If you have VLC installed, you can play the audio directly by uncommenting the following line
-            Process.Start("vlc", mp3Link);
+            //Process.Start("vlc", mp3Link);
             await Console.Out.WriteLineAsync("------------------------------------");
         }
 

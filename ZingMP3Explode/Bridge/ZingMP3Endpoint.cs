@@ -30,17 +30,21 @@ namespace ZingMP3Explode.Bridge
             this.httpClient = httpClient;
         }
 
-        public async ValueTask<string> GetAsync(string url, CancellationToken cancellationToken = default)
+        async ValueTask<string> GetAsync(string url, CancellationToken cancellationToken = default)
         {
             await CheckVersion(cancellationToken);
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
             return await httpClient.ExecuteAsync(request, cancellationToken);
         }
 
-        public async ValueTask<string> GetAsync(string apiEndpoint, Dictionary<string, string> parameters, CancellationToken cancellationToken = default)
+        public async ValueTask<string> GetAsync(string apiEndpoint, Dictionary<string, string>? parameters = null, CancellationToken cancellationToken = default)
         {
             await CheckVersion(cancellationToken);
-            string[] parametersArray = parameters.Select(x => $"{x.Key}={x.Value}").ToArray();
+            string[] parametersArray;
+            if (parameters == null)
+                parametersArray = [];
+            else 
+                parametersArray = parameters.Select(x => $"{x.Key}={x.Value}").ToArray();
             return await APIGet(apiEndpoint, parametersArray, cancellationToken);
         }
 

@@ -57,7 +57,7 @@ namespace ZingMP3Explode.Playlists
                 { "thumbSize", "600_600" }
             };
             string resolvedJson = await endpoint.GetAsync("/api/v2/page/get/playlist", parameters, cancellationToken);
-            Utils.CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZingErrorCode(resolvedJson, out JsonNode node);
             return node.Deserialize<Playlist>(JsonDefaults.Options);
         }
     }

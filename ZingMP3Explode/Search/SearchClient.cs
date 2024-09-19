@@ -51,7 +51,7 @@ namespace ZingMP3Explode.Search
                 { "allowCorrect", Convert.ToByte(allowCorrect).ToString() },
             };
             var resolvedJson = await endpoint.GetAsync("/api/v2/search", parameters, token);
-            Utils.CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZingErrorCode(resolvedJson, out JsonNode node);
             //var correctKeyword = node["correctKeyword"].GetValue<string?>();
             var data = node["items"].AsArray();
 

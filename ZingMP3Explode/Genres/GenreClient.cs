@@ -33,7 +33,7 @@ namespace ZingMP3Explode.Genres
                 { "type", "album" }
             };
             var resolvedJson = await endpoint.GetAsync("/api/v2/genre/get/info", parameters);
-            Utils.CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZingErrorCode(resolvedJson, out JsonNode node);
             return node.Deserialize<Genre>(JsonDefaults.Options);
         }
     }

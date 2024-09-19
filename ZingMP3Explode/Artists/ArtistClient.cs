@@ -57,7 +57,7 @@ namespace ZingMP3Explode.Artists
                 { "alias", alias }
             };
             var resolvedJson = await endpoint.GetAsync("/api/v2/page/get/artist", parameters, cancellationToken);
-            Utils.CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZingErrorCode(resolvedJson, out JsonNode node);
             return node.Deserialize<Artist>(JsonDefaults.Options);
         }
 
@@ -75,7 +75,7 @@ namespace ZingMP3Explode.Artists
                 { "sectionId", "aSongs" },
             };
             var resolvedJson = await endpoint.GetAsync("/api/v2/song/get/list", parameters, cancellationToken);
-            Utils.CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZingErrorCode(resolvedJson, out JsonNode node);
             return node.Deserialize<SongList>(JsonDefaults.Options);
         }
 
@@ -92,7 +92,7 @@ namespace ZingMP3Explode.Artists
                 { "sort", sortType.GetName() }
             };
             var resolvedJson = await endpoint.GetAsync("/api/v2/video/get/list", parameters, cancellationToken);
-            Utils.CheckErrorCode(resolvedJson, out JsonNode node);
+            Utils.CheckZingErrorCode(resolvedJson, out JsonNode node);
             return node.Deserialize<VideoList>(JsonDefaults.Options);
         }
 
