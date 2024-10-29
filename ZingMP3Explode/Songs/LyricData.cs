@@ -96,9 +96,15 @@ namespace ZingMP3Explode.Songs
                 }
                 lyricSentence = lyricSentence.Trim();
                 long lastWordTimestamp = sentence.Words.Last().EndTime;
-                lyricSentence += $"<{TimeSpan.FromMilliseconds(lastWordTimestamp):mm\\:ss\\.ff}>";
+                if (sentence.Words.Count > 1)
+                    lyricSentence += $"<{TimeSpan.FromMilliseconds(lastWordTimestamp):mm\\:ss\\.ff}>";
                 if (firstWordTimestamp - lastSentenceTimestamp > 5000)
-                    enhancedLyrics += $"[{TimeSpan.FromMilliseconds(lastSentenceTimestamp + 500):mm\\:ss\\.ff}]♪{Environment.NewLine}";
+                {
+                    if (enhancedLyrics.Length == 0)
+                        enhancedLyrics += $"[00:00.00]♪{Environment.NewLine}";
+                    else 
+                        enhancedLyrics += $"[{TimeSpan.FromMilliseconds(lastSentenceTimestamp + 500):mm\\:ss\\.ff}]♪{Environment.NewLine}";
+                }
                 lastSentenceTimestamp = lastWordTimestamp;
                 enhancedLyrics += lyricSentence + Environment.NewLine;
             }

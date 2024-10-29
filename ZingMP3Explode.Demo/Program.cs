@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using ZingMP3Explode.Cookies;
+using ZingMP3Explode.Songs;
 
 namespace ZingMP3Explode.Demo
 {
@@ -20,9 +21,9 @@ namespace ZingMP3Explode.Demo
             Console.OutputEncoding = Encoding.UTF8;
             await InitializeClientAsync();
             await GetSongInformationAsync();
-            //await GetArtistInformationAsync();
-            //await GetAlbumInformationAsync();
-            //await GetMVInformationAsync();
+            await GetArtistInformationAsync();
+            await GetAlbumInformationAsync();
+            await GetMVInformationAsync();
 
             await Task.Run(Console.ReadLine);
         }
@@ -73,6 +74,9 @@ namespace ZingMP3Explode.Demo
                 await Console.Out.WriteLineAsync($"MV: {song.MVLink}");
             string mp3Link = await client.Songs.GetAudioStreamLinkAsync(song.Id);
             await Console.Out.WriteLineAsync($"MP3 link: {mp3Link}");
+            LyricData lyricData = await client.Songs.GetLyricsAsync(song.Id);
+            await Console.Out.WriteLineAsync($"Synced lyrics:\r\n {lyricData.SyncedLyrics}\r\n\r\n");
+            await Console.Out.WriteLineAsync($"Enhanced lyrics:\r\n {lyricData.GetEnhancedLyrics()}");
             //If you have VLC installed, you can play the audio directly by uncommenting the following line
             //Process.Start("vlc", mp3Link);
             await Console.Out.WriteLineAsync("------------------------------------");
