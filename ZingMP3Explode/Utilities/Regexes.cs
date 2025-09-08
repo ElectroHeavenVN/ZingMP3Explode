@@ -17,7 +17,7 @@ namespace ZingMP3Explode.Utilities
         internal static readonly Regex PlaylistID = new Regex(@"^[A-Z0-9]{8}$", RegexOptions.Compiled);
         internal static readonly Regex PlaylistUrl = new Regex(@"zingmp3\.vn\/playlist\/(.*?)\/([A-Z0-9]{8})\.html", RegexOptions.Compiled);
         internal static readonly Regex SongUrl = new Regex(@"zingmp3\.vn\/bai-hat\/(.*?)\/(Z[A-Z0-9]{7})\.html", RegexOptions.Compiled);
-        internal static readonly Regex ShortSonngUrl = new Regex(@"zingmp3\.vn\/bai-hat\/(Z[A-Z0-9]{7})\.html", RegexOptions.Compiled);
+        internal static readonly Regex ShortSongUrl = new Regex(@"zingmp3\.vn\/bai-hat\/(Z[A-Z0-9]{7})\.html", RegexOptions.Compiled);
         internal static readonly Regex SongID = new Regex(@"^Z[A-Z0-9]{7}$", RegexOptions.Compiled);
         internal static readonly Regex VideoUrl = new Regex(@"zingmp3\.vn\/video-clip\/(.*?)\/(Z[A-Z0-9]{7})\.html", RegexOptions.Compiled);
         internal static readonly Regex VideoID = new Regex(@"^Z[A-Z0-9]{7}$", RegexOptions.Compiled);
@@ -72,7 +72,7 @@ namespace ZingMP3Explode.Utilities
 
         [GeneratedRegex(@"zingmp3\.vn\/bai-hat\/(Z[A-Z0-9]{7})\.html", RegexOptions.Compiled)]
         private static partial Regex ShortSongUrlRegex();
-        internal static Regex ShortSonngUrl => ShortSongUrlRegex();
+        internal static Regex ShortSongUrl => ShortSongUrlRegex();
         
         [GeneratedRegex(@"^Z[A-Z0-9]{7}$", RegexOptions.Compiled)]
         private static partial Regex SongIDRegex();

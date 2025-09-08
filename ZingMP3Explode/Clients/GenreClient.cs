@@ -33,7 +33,7 @@ namespace ZingMP3Explode.Entities.Genres
         public async Task<Genre> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             if (!Regexes.GenreID.IsMatch(id))
-                throw new ZingMP3ExplodeException("Invalid genre id");
+                throw new ZingMP3ExplodeException("Invalid genre ID");
             return await zClient.APIClient.GetGerneAsync(id, cancellationToken);
         }
     }

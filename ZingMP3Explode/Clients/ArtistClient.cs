@@ -23,20 +23,6 @@ namespace ZingMP3Explode.Clients
             zClient = client;
         }
 
-        /// <summary>
-        /// <para xml:lang="en">Checks if the given URL is a valid artist URL.</para>
-        /// <para xml:lang="vi">Kiểm tra xem URL đã cho có phải là URL nghệ sĩ hợp lệ hay không.</para>
-        /// </summary>
-        /// <param name="url">
-        /// <para xml:lang="en">The URL to check.</para>
-        /// <para xml:lang="vi">URL cần kiểm tra.</para>
-        /// </param>
-        /// <returns>
-        /// <para xml:lang="en">True if the URL is a valid artist URL.</para>
-        /// <para xml:lang="vi">Đúng nếu URL là URL nghệ sĩ hợp lệ.</para>
-        /// </returns>
-        public bool IsUrlValid(string url) => IsUrlValid(url, out _);
-
         static bool IsUrlValid(string url, out string alias)
         {
             alias = "";
@@ -52,40 +38,23 @@ namespace ZingMP3Explode.Clients
         }
 
         /// <summary>
-        /// <para xml:lang="en">Gets the artist information from the given URL.</para>
-        /// <para xml:lang="vi">Lấy thông tin nghệ sĩ từ URL đã cho.</para>
+        /// <para xml:lang="en">Gets the artist information from the given URL or alias.</para>
+        /// <para xml:lang="vi">Lấy thông tin nghệ sĩ từ URL hoặc bí danh.</para>
         /// </summary>
-        /// <param name="url">
-        /// <para xml:lang="en">The artist URL.</para>
-        /// <para xml:lang="vi">URL nghệ sĩ.</para>
+        /// <param name="urlOrAlias">
+        /// <para xml:lang="en">The artist URL or alias.</para>
+        /// <para xml:lang="vi">URL hoặc bí danh nghệ sĩ.</para>
         /// </param>
         /// <returns>
         /// <para xml:lang="en">The artist information.</para>
         /// <para xml:lang="vi">Thông tin nghệ sĩ.</para>
         /// </returns>
-        public async Task<Artist> GetAsync(string url, CancellationToken cancellationToken = default)
+        public async Task<Artist> GetAsync(string urlOrAlias, CancellationToken cancellationToken = default)
         {
-            if (!IsUrlValid(url, out string alias))
-                throw new ZingMP3ExplodeException("Invalid artist url");
-            return await GetByAliasAsync(alias, cancellationToken);
-        }
-
-        /// <summary>
-        /// <para xml:lang="en">Gets the artist information by the given alias.</para>
-        /// <para xml:lang="vi">Lấy thông tin nghệ sĩ theo bí danh đã cho.</para>
-        /// </summary>
-        /// <param name="alias">
-        /// <para xml:lang="en">The artist alias.</para>
-        /// <para xml:lang="vi">Bí danh nghệ sĩ.</para>
-        /// </param>
-        /// <returns>
-        /// <para xml:lang="en">The artist information.</para>
-        /// <para xml:lang="vi">Thông tin nghệ sĩ.</para>
-        /// </returns>
-        public async Task<Artist> GetByAliasAsync(string alias, CancellationToken cancellationToken = default)
-        {
+            if (!IsUrlValid(urlOrAlias, out string alias))
+                alias = urlOrAlias;
             if (!Regexes.ArtistAlias.IsMatch(alias))
-                throw new ZingMP3ExplodeException("Invalid artist alias");
+                throw new ZingMP3ExplodeException("Invalid artist URL/alias");
             return await zClient.APIClient.GetArtistByAliasAsync(alias, cancellationToken);
         }
 
@@ -108,7 +77,7 @@ namespace ZingMP3Explode.Clients
         public async IAsyncEnumerable<Song> GetSongsAsync(string id, SortType sortType = SortType.Popular, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             if (!Regexes.ArtistID.IsMatch(id))
-                throw new ZingMP3ExplodeException("Invalid artist id");
+                throw new ZingMP3ExplodeException("Invalid artist ID");
             await foreach (var song in zClient.APIClient.GetSongsAsync(id, sortType, cancellationToken))
                 yield return song;
         }
@@ -132,7 +101,7 @@ namespace ZingMP3Explode.Clients
         public async IAsyncEnumerable<IncompleteVideo> GetMVsAsync(string id, SortType sortType = SortType.Popular, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             if (!Regexes.ArtistID.IsMatch(id))
-                throw new ZingMP3ExplodeException("Invalid artist id");
+                throw new ZingMP3ExplodeException("Invalid artist ID");
             await foreach (var video in zClient.APIClient.GetMVsAsync(id, sortType, cancellationToken))
                 yield return video;
         }

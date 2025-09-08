@@ -21,20 +21,6 @@ namespace ZingMP3Explode.Clients
             zClient = client;
         }
 
-        /// <summary>
-        /// <para xml:lang="en">Checks if the given URL is a valid album URL.</para>
-        /// <para xml:lang="vi">Kiểm tra xem URL đã cho có phải là URL album hợp lệ hay không.</para>
-        /// </summary>
-        /// <param name="url">
-        /// <para xml:lang="en">The URL to check.</para>
-        /// <para xml:lang="vi">URL cần kiểm tra.</para>
-        /// </param>
-        /// <returns>
-        /// <para xml:lang="en">True if the URL is a valid album URL.</para>
-        /// <para xml:lang="vi">Đúng nếu URL là URL album hợp lệ.</para>
-        /// </returns>
-        public bool IsUrlValid(string url) => IsUrlValid(url, out _);
-
         static bool IsUrlValid(string url, out string id)
         {
             id = "";
@@ -56,40 +42,23 @@ namespace ZingMP3Explode.Clients
         }
 
         /// <summary>
-        /// <para xml:lang="en">Gets album information from a given URL.</para>
-        /// <para xml:lang="vi">Lấy thông tin album từ một URL đã cho.</para>
+        /// <para xml:lang="en">Gets album information from a given URL or ID.</para>
+        /// <para xml:lang="vi">Lấy thông tin album từ một URL hoặc ID.</para>
         /// </summary>
-        /// <param name="url">
-        /// <para xml:lang="en">The album URL.</para>
-        /// <para xml:lang="vi">URL album.</para>
+        /// <param name="idOrUrl">
+        /// <para xml:lang="en">The album URL or ID.</para>
+        /// <para xml:lang="vi">URL hoặc ID album.</para>
         /// </param>
         /// <returns>
         /// <para xml:lang="en">The album information.</para>
         /// <para xml:lang="vi">Thông tin album.</para>
         /// </returns>
-        public async Task<Album> GetAsync(string url, CancellationToken cancellationToken = default)
+        public async Task<Album> GetAsync(string idOrUrl, CancellationToken cancellationToken = default)
         {
-            if (!IsUrlValid(url, out string id))
-                throw new ZingMP3ExplodeException("Invalid album url");
-            return await GetByIDAsync(id, cancellationToken);
-        }
-
-        /// <summary>
-        /// <para xml:lang="en">Gets album information by its ID.</para>
-        /// <para xml:lang="vi">Lấy thông tin album từ ID.</para>
-        /// </summary>
-        /// <param name="id">
-        /// <para xml:lang="en">The album ID.</para>
-        /// <para xml:lang="vi">ID album.</para>
-        /// </param>
-        /// <returns>
-        /// <para xml:lang="en">The album information.</para>
-        /// <para xml:lang="vi">Thông tin album.</para>
-        /// </returns>
-        public async Task<Album> GetByIDAsync(string id, CancellationToken cancellationToken = default)
-        {
+            if (!IsUrlValid(idOrUrl, out string id))
+                id = idOrUrl;
             if (!Regexes.AlbumID.IsMatch(id))
-                throw new ZingMP3ExplodeException("Invalid album id");
+                throw new ZingMP3ExplodeException("Invalid album ID/URL");
             return await zClient.APIClient.GetAlbumAsync(id, cancellationToken);
         }
     }
