@@ -1,24 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Title>ZingMP3Explode</Title>
     <TargetFrameworks>net8.0;net462</TargetFrameworks>
     <IsPackable>true</IsPackable>
-    <Description>A library that provides an interface to interact with ZingMP3's API.</Description>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <Title>ZingMP3Explode</Title>
-    <SignAssembly>False</SignAssembly>
-    <Authors>ElectroHeavenVN</Authors>
-    <Copyright>Copyright © ElectroHeavenVN 2024-2025</Copyright>
-    <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl>https://github.com/ElectroHeavenVN/ZingMP3Explode</RepositoryUrl>
-    <PackageTags>zingmp3; mp3; zing; zalo; vng; lossless; flac; 320kbps; nct; nhaccuatui;</PackageTags>
-    <IncludeSymbols>False</IncludeSymbols>
-    <Deterministic>False</Deterministic>
-    <Version>0.0.0-dev</Version>
     <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>A library that provides an interface to interact with ZingMP3's API.</Description>
+    <PackageTags>zingmp3; mp3; zing; zalo; vng; lossless; flac; 320kbps; 320k;</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\ZingMP3Explode.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0'">
@@ -31,12 +31,20 @@
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-        <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>
+      <_Parameter1>$(MSBuildProjectName).Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c52cef61a8f91ce4b7748556e3790a782f015a9800516f5b7bab5980c1654939c9333090c107c3a7fa898899ce35e9db8dffc3c0acee6989f405c9c1b5ebe4a70468cca17f31fbc3119359a2e0b40fd4d5ff9818f256ec174ee799df3ae258bdd90ca96be9210cab673b7e72f60c0d7eaa7870b27b8631271c8165a58323d4c4</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.Text.Json" Version="9.0.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\icon.png" Pack="true" PackagePath="" Visible="false" />
+    <None Include="ZingMP3Explode.snk" />
+  </ItemGroup>
 </Project>

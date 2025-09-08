@@ -1,0 +1,14 @@
+<Project>
+
+  <PropertyGroup>
+    <Copyright>Copyright © ElectroHeavenVN 2024-2025</Copyright>
+    <Authors>ElectroHeavenVN</Authors>
+    <Version>0.0.0-dev</Version>
+    <Deterministic>False</Deterministic>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <PackageProjectUrl>https://github.com/ElectroHeavenVN/ZingMP3Explode</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ElectroHeavenVN/ZingMP3Explode</RepositoryUrl>
+  </PropertyGroup>
+
+</Project>
