@@ -45,6 +45,5 @@
 
   <ItemGroup>
     <None Include="..\icon.png" Pack="true" PackagePath="" Visible="false" />
-    <None Include="ZingMP3Explode.snk" />
   </ItemGroup>
 </Project>
