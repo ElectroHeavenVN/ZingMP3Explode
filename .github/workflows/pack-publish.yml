@@ -13,6 +13,10 @@ jobs:
           dotnet-version: 8.0.x
       - name: Restore dependencies
         run: dotnet restore
+      - name: Create Strong Name Key file
+        run: |
+          $base64 = "${{ secrets.SNK_BASE64 }}"
+          [System.IO.File]::WriteAllBytes("ZingMP3Explode.snk", [System.Convert]::FromBase64String($base64))
       - name: Build
         run: dotnet build --no-restore
 
@@ -31,6 +35,10 @@ jobs:
       - name: Get version information from tag
         id: get_version
         uses: battila7/get-version-action@v2
+      - name: Create Strong Name Key file
+        run: |
+          $base64 = "${{ secrets.SNK_BASE64 }}"
+          [System.IO.File]::WriteAllBytes("ZingMP3Explode.snk", [System.Convert]::FromBase64String($base64))
       - name: Create packages
         run: >
           dotnet pack
