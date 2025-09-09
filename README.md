@@ -16,7 +16,7 @@
 - [Nuget](https://www.nuget.org/packages/ZingMP3Explode/): `dotnet add package ZingMP3Explode` hoặc tìm kiếm "ZingMP3Explode" trong trình quản lý NuGet của Visual Studio.
 
 ## Cách sử dụng
-Xem tài liệu chi tiết và các ví dụ sử dụng tại [Wiki](./wiki).
+Xem tài liệu chi tiết và các ví dụ sử dụng tại [Wiki](../../wiki).
 
 ## Đóng góp
 Mọi đóng góp đều được hoan nghênh! Vui lòng fork kho lưu trữ và gửi pull request với các cải tiến hoặc sửa lỗi.
