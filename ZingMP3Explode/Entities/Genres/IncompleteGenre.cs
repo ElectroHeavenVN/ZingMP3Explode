@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using ZingMP3Explode.Interfaces;
+using ZingMP3Explode.Utilities;
 
 namespace ZingMP3Explode.Entities
 {
@@ -41,10 +42,17 @@ namespace ZingMP3Explode.Entities
         public string Alias { get; internal set; } = "";
 
         /// <summary>
-        /// <para xml:lang="en">Url to the genre.</para>
-        /// <para xml:lang="vi">Liên kết đến thể loại.</para>
+        /// <para xml:lang="en">The relative URL of the genre.</para>
+        /// <para xml:lang="vi">URL tương đối của thể loại.</para>
         /// </summary>
         [JsonInclude, JsonPropertyName("link")]
         public string Url { get; internal set; } = "";
+
+        /// <summary>
+        /// <para xml:lang="en">The full URL of the genre.</para>
+        /// <para xml:lang="vi">URL đầy đủ của thể loại.</para>
+        /// </summary>
+        [JsonIgnore]
+        public string FullUrl => Constants.ZINGMP3_LINK.TrimEnd('/') + Url;
     }
 }
