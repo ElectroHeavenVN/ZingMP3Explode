@@ -13,11 +13,19 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Create Strong Name Key file
+        if: ${{ secrets.SNK_BASE64 != '' }}
         run: |
           $base64 = "${{ secrets.SNK_BASE64 }}"
           [System.IO.File]::WriteAllBytes("ZingMP3Explode.snk", [System.Convert]::FromBase64String($base64))
       - name: Build
-        run: dotnet build --no-restore
+        shell: powershell
+        run: |
+          if ('${{ secrets.SNK_BASE64 }}' -ne '') {
+            dotnet build --no-restore
+          } else {
+            Write-Host "SNK secret not available — building without strong-name signing"
+            dotnet build --no-restore -p:SignAssembly=false
+          }
 
   pack:
     if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
@@ -44,11 +52,16 @@ jobs:
           -p:Version=${{ steps.get_version.outputs.version-without-v }}
           -p:ContinuousIntegrationBuild=true
           -c Release
-      - name: Upload artifacts
+      - name: Upload packages
         uses: actions/upload-artifact@v6
         with:
           name: packages
           path: "**/*.nupkg"
+      - name: Upload package symbols
+        uses: actions/upload-artifact@v6
+        with:
+          name: symbols
+          path: "**/*.snupkg"
 
   deploy:
     runs-on: windows-latest
@@ -60,12 +73,21 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 8.0.x
-      - name: Download artifacts
+      - name: Download packages
         uses: actions/download-artifact@v7
         with:
           name: packages
+      - name: Download symbols
+        uses: actions/download-artifact@v7
+        with:
+          name: symbols
       - name: Push packages
         run: >
           dotnet nuget push **/*.nupkg
+          --source "https://api.nuget.org/v3/index.json"
+          --api-key ${{ secrets.NUGET_API_KEY }}
+      - name: Push package symbols
+        run: >
+          dotnet nuget push **/*.snupkg
           --source "https://api.nuget.org/v3/index.json"
           --api-key ${{ secrets.NUGET_API_KEY }}
