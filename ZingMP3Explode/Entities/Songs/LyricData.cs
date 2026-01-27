@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace ZingMP3Explode.Entities
@@ -32,6 +33,9 @@ namespace ZingMP3Explode.Entities
             /// </summary>
             [JsonIgnore]
             public ReadOnlyCollection<Word> Words => words.AsReadOnly();
+
+            /// <inheritdoc/>
+            public override string ToString() => string.Join(" ", words.Select(w => w.Content));
         }
 
         /// <summary>
@@ -63,6 +67,9 @@ namespace ZingMP3Explode.Entities
             /// </summary>
             [JsonInclude, JsonPropertyName("data")]
             public string Content { get; internal set; } = "";
+
+            /// <inheritdoc/>
+            public override string ToString() => Content;
         }
 
         [JsonInclude, JsonPropertyName("sentences")]
@@ -114,49 +121,90 @@ namespace ZingMP3Explode.Entities
         /// <para xml:lang="en">Get the karaoke lyrics in the A2 format.</para>
         /// <para xml:lang="vi">Lấy lời karaoke ở định dạng A2.</para>
         /// </summary>
+        /// <param name="splitWords">
+        /// <para xml:lang="en">Whether to split <see cref="Word"/> objects containing multiple words into multiple words with evenly distributed timestamps.</para>
+        /// <para xml:lang="vi">Tách các <see cref="Word"/> chứa nhiều từ thành nhiều từ với dấu thời gian chia đều hay không.</para>
+        /// </param>
         /// <returns>
         /// <para xml:lang="en">The formatted lyrics.</para>
         /// <para xml:lang="vi">Lời bài hát đã được định dạng.</para>
         /// </returns>
-        public string GetEnhancedLyrics()
+        public string GetEnhancedLyrics(bool splitWords = false)
         {
-            //TODO: split words object containing multiple words into multiple word objects
             if (Sentences.Count == 0)
                 return "";
             long lastSentenceTimestamp = 0;
-            string enhancedLyrics = "";
-            foreach (Sentence sentence in Sentences)
+            StringBuilder enhancedLyrics = new StringBuilder();
+            StringBuilder lyricSentence = new StringBuilder();
+            List<List<Word>> sentenceWords = Sentences.Select(s => s.words).ToList();
+            foreach (List<Word> w in sentenceWords)
             {
-                long firstWordTimestamp = sentence.Words.First().StartTime;
-                string lyricSentence = "";
+                List<Word> words = [..w];
+                long firstWordTimestamp = words[0].StartTime;
+                lyricSentence.Clear();
                 long lastTimestamp = 0;
-                foreach (Word word in sentence.Words)
+                if (splitWords)
                 {
-                    long timestamp = word.StartTime;
+                    int sameTimeWordsCount = 0;
+                    for (int i = 0; i < words.Count; i++)
+                    {
+                        var currentWord = words[i];
+                        if (currentWord.StartTime == currentWord.EndTime)
+                            sameTimeWordsCount++;
+                        else if (sameTimeWordsCount > 0)
+                        {
+                            long timePerWord = (currentWord.EndTime - currentWord.StartTime) / (sameTimeWordsCount + 1);
+                            for (int j = 0; j < sameTimeWordsCount; j++)
+                            {
+                                Word word = new Word
+                                {
+                                    Content = words[i - j - 1].Content,
+                                    StartTime = words[i - j - 1].StartTime + timePerWord * j
+                                };
+                                word.EndTime = word.StartTime + timePerWord;
+                                words[i - j - 1] = word;
+                            }
+                            words[i] = new Word
+                            {
+                                Content = currentWord.Content,
+                                StartTime = words[i - 1].EndTime,
+                                EndTime = currentWord.EndTime
+                            };
+                            sameTimeWordsCount = 0;
+                        }
+                    }
+                }
+                for (int i = 0; i < words.Count; i++)
+                {
+                    long timestamp = words[i].StartTime;
                     if (timestamp != lastTimestamp)
                     {
-                        if (string.IsNullOrEmpty(lyricSentence))
-                            lyricSentence += $"[{TimeSpan.FromMilliseconds(timestamp):mm\\:ss\\.ff}]";
+                        if (lyricSentence.Length == 0)
+                            lyricSentence.Append($"[{TimeSpan.FromMilliseconds(timestamp):mm\\:ss\\.ff}] ");
                         else
-                            lyricSentence += $"<{TimeSpan.FromMilliseconds(timestamp):mm\\:ss\\.ff}>";
+                            lyricSentence.Append($"<{TimeSpan.FromMilliseconds(timestamp):mm\\:ss\\.ff}>");
                         lastTimestamp = timestamp;
                     }
-                    lyricSentence += word.Content + ' ';
+                    lyricSentence.Append(words[i].Content);
+                    if (i < words.Count - 1)
+                        lyricSentence.Append(' ');
                 }
-                lyricSentence = lyricSentence.Trim();
-                long lastWordTimestamp = sentence.Words.Last().EndTime;
-                if (sentence.Words.Count > 1)
-                    lyricSentence += $"<{TimeSpan.FromMilliseconds(lastWordTimestamp):mm\\:ss\\.ff}>";
+                long lastWordTimestamp = words[words.Count - 1].EndTime;
+                if (words.Count > 1)
+                    lyricSentence.Append($"<{TimeSpan.FromMilliseconds(lastWordTimestamp):mm\\:ss\\.ff}>");
                 if (firstWordTimestamp - lastSentenceTimestamp > 5000)
+                {
                     if (enhancedLyrics.Length == 0)
-                        enhancedLyrics += $"[00:00.00]♪{Environment.NewLine}";
+                        enhancedLyrics.AppendLine($"[00:00.00] ♪");
                     else
-                        enhancedLyrics += $"[{TimeSpan.FromMilliseconds(lastSentenceTimestamp + 500):mm\\:ss\\.ff}]♪{Environment.NewLine}";
+                        enhancedLyrics.AppendLine($"[{TimeSpan.FromMilliseconds(lastSentenceTimestamp + 500):mm\\:ss\\.ff}] ♪");
+                }
                 lastSentenceTimestamp = lastWordTimestamp;
-                enhancedLyrics += lyricSentence + Environment.NewLine;
+                enhancedLyrics.AppendLine(lyricSentence.ToString().Trim());
             }
-            enhancedLyrics += $"[{TimeSpan.FromMilliseconds(Sentences.Last().Words.Last().EndTime):mm\\:ss\\.ff}]♪";
-            return enhancedLyrics;
+            var lastSentenceWords = sentenceWords[sentenceWords.Count - 1];
+            enhancedLyrics.Append($"[{TimeSpan.FromMilliseconds(lastSentenceWords[lastSentenceWords.Count - 1].EndTime + 2000):mm\\:ss\\.ff}] ♪");
+            return enhancedLyrics.ToString();
         }
 
         /// <summary>
@@ -171,16 +219,15 @@ namespace ZingMP3Explode.Entities
         {
             if (string.IsNullOrEmpty(SyncedLyrics))
                 return "";
-            string result = "";
+            StringBuilder result = new StringBuilder();
             foreach (string sentence in SyncedLyrics.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
             {
                 string lyric = sentence;
                 if (sentence.Contains(']'))
                     lyric = sentence.Remove(sentence.IndexOf('['), sentence.LastIndexOf(']') - sentence.IndexOf('[') + 1).Trim();
-                result += lyric + Environment.NewLine;
+                result.AppendLine(lyric);
             }
-            result = result.Trim(Environment.NewLine.ToCharArray());
-            return result;
+            return result.ToString().Trim(Environment.NewLine.ToCharArray());
         }
     }
 }

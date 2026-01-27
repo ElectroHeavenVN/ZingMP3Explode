@@ -35,7 +35,7 @@ namespace ZingMP3Explode.Demo
             await Console.Out.WriteLineAsync($"MP3 link: {mp3Url}");
             LyricData lyricData = await client.Songs.GetLyricsAsync(song.ID);
             await Console.Out.WriteLineAsync($"Synced lyrics:\r\n{lyricData.SyncedLyrics}\r\n\r\n");
-            await Console.Out.WriteLineAsync($"Karaoke lyrics:\r\n{lyricData.GetEnhancedLyrics()}");
+            await Console.Out.WriteLineAsync($"Karaoke lyrics:\r\n{lyricData.GetEnhancedLyrics(true)}");
             //If you have VLC installed, you can play the audio directly by uncommenting the following line
             //Process.Start("vlc", mp3Url);
             await Console.Out.WriteLineAsync("------------------------------------");

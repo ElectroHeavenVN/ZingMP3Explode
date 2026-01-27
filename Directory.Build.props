@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <Copyright>Copyright © ElectroHeavenVN 2024-2025</Copyright>
+    <Copyright>Copyright Â© ElectroHeavenVN 2024-2026</Copyright>
     <Authors>ElectroHeavenVN</Authors>
     <Version>0.0.0-dev</Version>
     <Deterministic>False</Deterministic>
