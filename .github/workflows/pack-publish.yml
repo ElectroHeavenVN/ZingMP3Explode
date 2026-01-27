@@ -29,6 +29,8 @@ jobs:
           } else {
             dotnet build --no-restore -p:SignAssembly=false
           }
+      - name: Run tests
+        run: dotnet test --no-build --verbosity normal
 
   pack:
     if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}

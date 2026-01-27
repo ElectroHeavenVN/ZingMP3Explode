@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -9,11 +10,7 @@ namespace ZingMP3Explode.Utilities
 {
     internal static class Utils
     {
-#if NETFRAMEWORK
-        static Random random = new Random();
-#else 
-        static Random random = Random.Shared;
-#endif
+        static readonly Random random = new Random();
 
         #region UA
         static string ChromeUserAgent()
@@ -86,10 +83,10 @@ namespace ZingMP3Explode.Utilities
 
         internal static string HashSHA256(string text)
         {
-#if NETFRAMEWORK
-            return BitConverter.ToString(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(text)), 0).Replace("-", "").ToLower();
-#else
+#if NET5_0_OR_GREATER
             return BitConverter.ToString(SHA256.HashData(Encoding.UTF8.GetBytes(text)), 0).Replace("-", "").ToLower();
+#else
+            return BitConverter.ToString(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(text)), 0).Replace("-", "").ToLower();
 #endif
         }
 
@@ -118,6 +115,15 @@ namespace ZingMP3Explode.Utilities
             if (!jsonNode.AsObject().ContainsKey("data") || jsonNode["data"] is null)
                 throw new ZingMP3ExplodeException("The API does not return any data");
             node = jsonNode["data"]!;
+        }
+
+        internal static DecompressionMethods GetDecompressionMethods()
+        {
+#if NETFRAMEWORK
+            return DecompressionMethods.GZip | DecompressionMethods.Deflate;
+#else
+            return DecompressionMethods.All;
+#endif
         }
     }
 }

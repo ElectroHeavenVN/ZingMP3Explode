@@ -78,5 +78,17 @@
                 Assert.AreEqual("IWZ9Z08I", genre.Parent?.ID);
             }, TestContext.CancellationTokenSource.Token).ConfigureAwait(false).GetAwaiter().GetResult();
         }
+
+        [TestMethod]
+        public void TestGetZingChart()
+        {
+            Task.Run(async () =>
+            {
+                ZingMP3Client client = new ZingMP3Client();
+                await client.InitializeAsync(TestContext.CancellationTokenSource.Token);
+                var chart = await client.Chart.GetAsync(TestContext.CancellationTokenSource.Token);
+                // chart value change frequently, so we don't assert specific values here
+            }, TestContext.CancellationTokenSource.Token).ConfigureAwait(false).GetAwaiter().GetResult();
+        }
     }
 }

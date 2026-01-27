@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Text.Json.Nodes;
+using System.Threading;
+using System.Threading.Tasks;
 using ZingMP3Explode.Entities;
 using ZingMP3Explode.Exceptions;
 
@@ -28,6 +33,20 @@ namespace ZingMP3Explode.Utilities
                 _ => throw new ZingMP3ExplodeException("Invalid search filter", new ArgumentOutOfRangeException(nameof(filter)))
             };
         }
+
+#if !NET7_0_OR_GREATER
+        internal static async Task<string> ReadAsStringAsync(this HttpContent content, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            string result = await content.ReadAsStringAsync();
+            return result;
+        }
+
+        internal static ReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
+        {
+            return new ReadOnlyDictionary<TKey, TValue>(dictionary);
+        }
+#endif
 
         internal static string GetStringValue(this JsonNode? jsonNode, string? defaultValue = "") => jsonNode?.GetValue<string>() ?? defaultValue ?? string.Empty;
 

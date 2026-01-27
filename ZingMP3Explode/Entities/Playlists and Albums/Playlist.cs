@@ -46,7 +46,6 @@ namespace ZingMP3Explode.Entities
             IsShuffle = baseList.IsShuffle;
             SectionID = baseList.SectionID;
             IsPR = baseList.IsPR;
-
         }
     }
 }

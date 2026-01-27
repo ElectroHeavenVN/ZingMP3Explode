@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
+using ZingMP3Explode.Utilities;
 
 namespace ZingMP3Explode.Entities
 {
@@ -20,11 +21,8 @@ namespace ZingMP3Explode.Entities
         /// <para xml:lang="vi">Từ điển chứa các URL luồng HLS với chất lượng làm khóa (ví dụ: "720p", "1080p", "0p").</para>
         /// </summary>
         [JsonIgnore]
-#if NETFRAMEWORK
-        public ReadOnlyDictionary<string, string> HLS => new(hls);
-#else
         public ReadOnlyDictionary<string, string> HLS => hls.AsReadOnly();
-#endif
+
         /// <summary>
         /// <para xml:lang="en">Gets the best available HLS stream URL based on quality preference (1080p > 720p > 360p > 0p).</para>
         /// <para xml:lang="vi">Lấy URL luồng HLS có chất lượng tốt nhất dựa trên ưu tiên chất lượng (1080p > 720p > 360p > 0p).</para>

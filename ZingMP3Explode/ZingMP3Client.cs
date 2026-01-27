@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using ZingMP3Explode.Clients;
+using ZingMP3Explode.Entities;
 using ZingMP3Explode.Entities.Genres;
 using ZingMP3Explode.Entities.Songs;
 using ZingMP3Explode.Entities.Videos;
@@ -83,6 +84,7 @@ namespace ZingMP3Explode
             Genres = new GenreClient(this);
             Search = new SearchClient(this);
             CurrentUser = new UserClient(this);
+            Chart = new ZingChartClient(this);
         }
 
         /// <summary>
@@ -103,11 +105,7 @@ namespace ZingMP3Explode
         /// </param>
         public ZingMP3Client(string apiKey = Constants.DEFAULT_API_KEY, string secret = Constants.DEFAULT_SECRET, string version = Constants.DEFAULT_VERSION) : this(new HttpClient(new HttpClientHandler()
         {
-#if NETFRAMEWORK
-            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-#else
-                AutomaticDecompression = DecompressionMethods.All,
-#endif
+            AutomaticDecompression = Utils.GetDecompressionMethods(),
         }), apiKey, secret, version)
         { }
 
@@ -160,6 +158,12 @@ namespace ZingMP3Explode
         public UserClient CurrentUser { get; }
 
         /// <summary>
+        /// <para xml:lang="en">Client for the weekly chart (#zingchart) related operations.</para>
+        /// <para xml:lang="vi">Client để thực hiện các thao tác liên quan đến bảng xếp hạng hàng tuần (#zingchart).</para>
+        /// </summary>
+        public ZingChartClient Chart { get; }
+
+        /// <summary>
         /// <para xml:lang="en">Initializes the client by fetching the latest API key, secret, and version from ZingMP3.</para>
         /// <para xml:lang="vi">Khởi tạo client bằng cách lấy khóa API, khóa bí mật và phiên bản mới nhất từ ZingMP3.</para>
         /// </summary>
@@ -168,32 +172,17 @@ namespace ZingMP3Explode
             var httpResponse = await HttpClient.GetAsync(Constants.ZINGMP3_LINK, cancellationToken);
             if (!httpResponse.IsSuccessStatusCode)
                 throw new ZingMP3ExplodeException($"Failed to fetch ZingMP3 main page. Status code: {httpResponse.StatusCode}");
-#if NETFRAMEWORK
-            string html = await httpResponse.Content.ReadAsStringAsync();
-#else
             string html = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-#endif
             Match match = Regexes.MainMinJS.Match(html);
             Version = match.Groups[1].Value;
             string mainMinJSUrl = match.Value;
-            var handler = new HttpClientHandler()
-            {
-#if NETFRAMEWORK
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-#else
-                AutomaticDecompression = DecompressionMethods.All,
-#endif
-            };
-            HttpClient client = new HttpClient(handler, true);
+            //HttpClient client = new HttpClient(new HttpClientHandler() { AutomaticDecompression = Utils.GetDecompressionMethods() }, true);
+            HttpClient client = HttpClient;
             client.DefaultRequestHeaders.Referrer = new Uri(Constants.ZINGMP3_LINK);
             httpResponse = await client.GetAsync(mainMinJSUrl, cancellationToken);
             if (!httpResponse.IsSuccessStatusCode)
                 throw new ZingMP3ExplodeException($"Failed to fetch main.min.js. Status code: {httpResponse.StatusCode}");
-#if NETFRAMEWORK
-            string mainMinJS = await httpResponse.Content.ReadAsStringAsync();
-#else
             string mainMinJS = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-#endif
             int startIndex = mainMinJS.IndexOf("\"NON_LOGGED_ADD_RECENT_PLAYLIST\"");
             mainMinJS = mainMinJS.Substring(startIndex, mainMinJS.IndexOf("\"STORAGE_ADD_SONG\"") - startIndex);
             Match apiKeyAndSecretMatch = Regexes.ApiKeySecret.Match(mainMinJS);

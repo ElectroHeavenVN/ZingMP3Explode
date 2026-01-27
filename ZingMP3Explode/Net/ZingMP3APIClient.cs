@@ -14,6 +14,8 @@ using ZingMP3Explode.Interfaces;
 using ZingMP3Explode.SourceGen;
 using ZingMP3Explode.Utilities;
 
+// TODO: Hubs, top 100
+
 namespace ZingMP3Explode.Net
 {
     /// <summary>
@@ -251,13 +253,7 @@ namespace ZingMP3Explode.Net
             {
                 HttpResponseMessage message = await http.GetAsync(lyricData.File, cancellationToken);
                 if (message.IsSuccessStatusCode)
-                {
-#if NETFRAMEWORK
-                    lyricData.SyncedLyrics = await message.Content.ReadAsStringAsync();
-#else
                     lyricData.SyncedLyrics = await message.Content.ReadAsStringAsync(cancellationToken);
-#endif
-                }
             }
             return lyricData;
         }
@@ -450,11 +446,32 @@ namespace ZingMP3Explode.Net
             return node.Deserialize(SourceGenerationContext.Default.ListAlbum) ?? throw new ZingMP3ExplodeException("Cannot get recent albums.");
         }
 
-        ////https://zingmp3.vn/api/v2/page/get/chart-home?...
-        //public async Task<...> GetCurrentZingChartAsync(CancellationToken cancellationToken = default)
-        //{
+        public async Task<ZingChartData> GetZingChartAsync(CancellationToken cancellationToken = default)
+        {
+            string path = "page/get/chart-home";
+            JsonNode node = await SendGetAndCheckErrorCode(path, null, cancellationToken);
+            return node.Deserialize(SourceGenerationContext.Default.ZingChartData) ?? throw new ZingMP3ExplodeException("Cannot get current Zing chart.");
+        }
+        
+        public async Task<WeeklyLeaderboard> GetWeeklyLeaderboardRegionAsync(string id, int week, int year, CancellationToken cancellationToken = default)
+        {
+            string path = "page/get/week-chart";
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            {
+                { "id", id },
+                { "week", week },
+                { "year", year }
+            };
+            JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
+            return node.Deserialize(SourceGenerationContext.Default.WeeklyLeaderboard) ?? throw new ZingMP3ExplodeException($"Cannot get weekly leaderboard region with id {id} for week {week}, year {year}.");
+        }
 
-        //}
+        public async Task<PageSection<Song>> GetNewlyReleasedSongsAsync(CancellationToken cancellationToken = default)
+        {
+            string path = "page/get/newrelease-chart";
+            JsonNode node = await SendGetAndCheckErrorCode(path, null, cancellationToken);
+            return node.Deserialize(SourceGenerationContext.Default.PageSectionSong) ?? throw new ZingMP3ExplodeException("Cannot get newly released songs.");
+        }
 
         public async Task<JsonNode> CallAPIAsync(string path, Dictionary<string, object>? parameters, CancellationToken cancellationToken = default)
         {
@@ -471,11 +488,7 @@ namespace ZingMP3Explode.Net
             HttpRequestMessage request = CreateRequest(HttpMethod.Get, Constants.ZINGMP3_LINK.TrimEnd('/') + Constants.API_BASE_PATH + path.TrimStart('/'), pr);
             HttpResponseMessage response = await http.SendAsync(request, cancellationToken);
             response.EnsureSuccessStatusCode();
-#if NET5_0_OR_GREATER
             Utils.CheckErrorCode(await response.Content.ReadAsStringAsync(cancellationToken), out JsonNode result);
-#else
-            Utils.CheckErrorCode(await response.Content.ReadAsStringAsync(), out JsonNode result);
-#endif
             return result;
         }
 

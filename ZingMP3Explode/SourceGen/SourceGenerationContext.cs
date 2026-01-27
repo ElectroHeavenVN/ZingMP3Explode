@@ -43,6 +43,9 @@ namespace ZingMP3Explode.SourceGen
     [JsonSerializable(typeof(VideoStream))]
     [JsonSerializable(typeof(MultiSearchResult))]
     [JsonSerializable(typeof(CurrentUserAssets))]
+    [JsonSerializable(typeof(ZingChartData))]
+    [JsonSerializable(typeof(RealTimeChart))]
+    [JsonSerializable(typeof(RealTimeChartGraph))]
     internal partial class SourceGenerationContext : JsonSerializerContext
     {
         static SourceGenerationContext()
@@ -58,6 +61,7 @@ namespace ZingMP3Explode.SourceGen
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             };
             options.Converters.Add(new ArtistConverter());
+            options.Converters.Add(new ChartGraphTimesConverter());
             return options;
         }
     }

@@ -310,11 +310,36 @@ namespace ZingMP3Explode.Entities
         public long Comments { get; internal set; }
 
         /// <summary>
-        /// <para xml:lang="en">The ranking status of the song in the #zingchart leaderboard. Negative values indicate the rank of the song is decreasing and vice versa.</para>
+        /// <para xml:lang="en">The ranking status of the song in the #zingchart leaderboard. Negative values indicate the rank of the song has dropped, and vice versa.</para>
         /// <para xml:lang="vi">Trạng thái xếp hạng của bài hát trên bảng xếp hạng #zingchart. Giá trị âm cho biết thứ hạng giảm, ngược lại là tăng.</para>
         /// </summary>
         [JsonInclude, JsonPropertyName("rakingStatus")]
         public int RankingStatus { get; internal set; }
+
+        /// <summary>
+        /// <para xml:lang="en">The ranking score of the song in the #zingchart leaderboard.</para>
+        /// <para xml:lang="vi">Điểm xếp hạng của bài hát trên bảng xếp hạng #zingchart.</para>
+        /// </summary>
+        [JsonInclude, JsonPropertyName("score")]
+        public int RankingScore { get; internal set; }
+
+        /// <summary>
+        /// <para xml:lang="en">The weekly ranking of the song in the weekly leaderboard.</para>
+        /// <para xml:lang="vi">Thứ tự xếp hạng của bài hát trong bảng xếp hạng tuần.</para>
+        /// </summary>
+        [JsonInclude, JsonPropertyName("weeklyRanking")]
+        public int WeeklyRanking { get; internal set; }
+
+        /// <summary>
+        /// <para xml:lang="en">The main artist of the song.</para>
+        /// <para xml:lang="vi">Nghệ sĩ chính của bài hát.</para>
+        /// </summary>
+        /// <remarks>
+        /// <para xml:lang="en">This property is populated when the current song is in the top 3 of the #zingchart leaderboard, and is returned by the chart API.</para>
+        /// <para xml:lang="vi">Thuộc tính này được nạp khi bài hát hiện tại nằm trong top 3 của bảng xếp hạng #zingchart, và được trả về bởi API bảng xếp hạng.</para>
+        /// </remarks>
+        [JsonInclude, JsonPropertyName("artist")]
+        public IncompleteArtist? Artist { get; internal set; }
 
         /// <summary>
         /// Unknown purpose.
@@ -346,5 +371,10 @@ namespace ZingMP3Explode.Entities
         /// </summary>
         [JsonInclude, JsonPropertyName("canDelete")]
         public bool CanDelete { get; internal set; }
+        /// <summary>
+        /// Unknown purpose.
+        /// </summary>
+        [JsonInclude, JsonPropertyName("totalTopZing")]
+        public int TotalTopZing { get; internal set; }
     }
 }
