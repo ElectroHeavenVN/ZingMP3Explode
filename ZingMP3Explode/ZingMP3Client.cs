@@ -30,19 +30,19 @@ namespace ZingMP3Explode
         /// <para xml:lang="en">The API key used for authentication.</para>
         /// <para xml:lang="vi">Khóa API được sử dụng để xác thực.</para>
         /// </summary>
-        public string APIKey { get; set; } = Constants.DEFAULT_API_KEY;
+        public string APIKey { get; set; }
 
         /// <summary>
         /// <para xml:lang="en">The secret key used for signing requests.</para>
         /// <para xml:lang="vi">Khóa bí mật được sử dụng để ký các yêu cầu.</para>
         /// </summary>
-        public string Secret { get; set; } = Constants.DEFAULT_SECRET;
+        public string Secret { get; set; }
 
         /// <summary>
         /// <para xml:lang="en">The version of the ZingMP3 API.</para>
         /// <para xml:lang="vi">Phiên bản của API ZingMP3.</para>
         /// </summary>
-        public string Version { get; set; } = Constants.DEFAULT_VERSION;
+        public string Version { get; set; }
 
         internal HttpClient HttpClient { get; }
 

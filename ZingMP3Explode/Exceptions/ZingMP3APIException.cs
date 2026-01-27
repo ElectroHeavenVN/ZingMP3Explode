@@ -20,8 +20,8 @@ namespace ZingMP3Explode.Exceptions
         internal ZingMP3APIException(int errorCode, string message) : base(message)
         {
             ErrorCode = errorCode;
-        }       
-        
+        }
+
         /// <inheritdoc/>
         public override string ToString()
         {

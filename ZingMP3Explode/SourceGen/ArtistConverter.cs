@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using ZingMP3Explode.Entities;
+using ZingMP3Explode.Utilities;
 
 namespace ZingMP3Explode.SourceGen
 {

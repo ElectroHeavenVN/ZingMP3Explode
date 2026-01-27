@@ -42,6 +42,7 @@ namespace ZingMP3Explode.SourceGen
     [JsonSerializable(typeof(VideoLyrics))]
     [JsonSerializable(typeof(VideoStream))]
     [JsonSerializable(typeof(MultiSearchResult))]
+    [JsonSerializable(typeof(CurrentUserAssets))]
     internal partial class SourceGenerationContext : JsonSerializerContext
     {
         static SourceGenerationContext()

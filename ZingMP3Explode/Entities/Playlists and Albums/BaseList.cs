@@ -151,7 +151,7 @@ namespace ZingMP3Explode.Entities
 
         /// <summary>
         /// <para xml:lang="en">Indicates if this list is a single.</para>
-        /// <para xml:lang="vi">Danh sách này có phải là single hay không.</para>
+        /// <para xml:lang="vi">Danh sách này có phải là đĩa đơn hay không.</para>
         /// </summary>
         [JsonInclude, JsonPropertyName("isSingle")]
         public bool? IsSingle { get; internal set; }

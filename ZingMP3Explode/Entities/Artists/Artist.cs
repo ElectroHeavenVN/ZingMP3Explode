@@ -119,11 +119,11 @@ namespace ZingMP3Explode.Entities
 
         /// <summary>
         /// <para xml:lang="en">Get all singles and EPs of the artist.</para>
-        /// <para xml:lang="vi">Lấy tất cả single và EP của nghệ sĩ.</para>
+        /// <para xml:lang="vi">Lấy tất cả đĩa đơn và đĩa mở rộng của nghệ sĩ.</para>
         /// </summary>
         /// <returns>
         /// <para xml:lang="en">A list of singles and EPs.</para>
-        /// <para xml:lang="vi">Danh sách các single và EP.</para>
+        /// <para xml:lang="vi">Danh sách các đĩa đơn và đĩa mở rộng.</para>
         /// </returns>
         public List<Album> GetSingleAndEPs()
         {
@@ -153,11 +153,11 @@ namespace ZingMP3Explode.Entities
 
         /// <summary>
         /// <para xml:lang="en">Get all albums, singles, and EPs of the artist.</para>
-        /// <para xml:lang="vi">Lấy tất cả album, single và EP của nghệ sĩ.</para>
+        /// <para xml:lang="vi">Lấy tất cả album, đĩa đơn và đĩa mở rộng của nghệ sĩ.</para>
         /// </summary>
         /// <returns>
         /// <para xml:lang="en">A list of albums, singles, and EPs.</para>
-        /// <para xml:lang="vi">Danh sách các album, single và EP.</para>
+        /// <para xml:lang="vi">Danh sách các album, đĩa đơn và đĩa mở rộng.</para>
         /// </returns>
         public List<Album> GetAllAlbums() => GetSingleAndEPs().Concat(GetAlbums()).ToList();
 

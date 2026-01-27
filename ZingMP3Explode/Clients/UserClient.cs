@@ -101,5 +101,48 @@ namespace ZingMP3Explode.Clients
             await foreach (var artist in zClient.APIClient.GetMyBlockedArtistsAsync(cancellationToken))
                 yield return artist;
         }
+
+        /// <summary>
+        /// <para xml:lang="en">Gets information about the current user's favorite and blocked assets.</para>
+        /// <para xml:lang="vi">Lấy thông tin về nội dung yêu thích và bị chặn của người dùng hiện tại.</para>
+        /// </summary>
+        /// <returns>
+        /// <para xml:lang="en">Information about the current user's assets.</para>
+        /// <para xml:lang="vi">Thông tin về nội dung của người dùng hiện tại.</para>
+        /// </returns>
+        public async Task<CurrentUserAssets> GetAssetsAsync(CancellationToken cancellationToken = default)
+        {
+            return await zClient.APIClient.GetCurrentUserAssetsAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// <para xml:lang="en">Gets song recommendations for the current user.</para>
+        /// <para xml:lang="vi">Lấy đề xuất bài hát cho người dùng hiện tại.</para>
+        /// </summary>
+        /// <param name="count">
+        /// <para xml:lang="en">The number of recommended songs to retrieve.</para>
+        /// <para xml:lang="vi">Số lượng bài hát được đề xuất để lấy.</para>
+        /// </param>
+        /// <returns>
+        /// <para xml:lang="en">A list of recommended songs.</para>
+        /// <para xml:lang="vi">Danh sách các bài hát được đề xuất.</para>
+        /// </returns>
+        public async Task<List<Song>> GetSongsRecommendationsAsync(int count = 20, CancellationToken cancellationToken = default)
+        {
+            return await zClient.APIClient.GetSongsRecommendationsAsync(count, cancellationToken);
+        }
+
+        /// <summary>
+        /// <para xml:lang="en">Gets the recently listened albums of the current user.</para>
+        /// <para xml:lang="vi">Lấy các album đã nghe gần nhất của người dùng hiện tại.</para>
+        /// </summary>
+        /// <returns>
+        /// <para xml:lang="en">A list of recently listened albums.</para>
+        /// <para xml:lang="vi">Danh sách các album đã nghe gần nhất.</para>
+        /// </returns>
+        public async Task<List<Album>> GetRecentAlbumsAsync(CancellationToken cancellationToken = default)
+        {
+            return await zClient.APIClient.GetRecentAlbumsAsync(cancellationToken);
+        }
     }
 }

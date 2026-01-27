@@ -2,7 +2,7 @@
 
 namespace ZingMP3Explode.Utilities
 {
-    internal partial class Regexes
+    internal static partial class Regexes
     {
 #if NETFRAMEWORK
         internal static readonly Regex MainMinJS = new Regex("https:\\/\\/zmdjs.zmdcdn.me\\/zmp3-desktop\\/v(.*?)\\/static\\/js\\/main\\.min\\.js", RegexOptions.Compiled);
@@ -76,11 +76,11 @@ namespace ZingMP3Explode.Utilities
         
         [GeneratedRegex(@"^Z[A-Z0-9]{7}$", RegexOptions.Compiled)]
         private static partial Regex SongIDRegex();
-        internal static Regex SongID = SongIDRegex();
+        internal static Regex SongID => SongIDRegex();
 
         [GeneratedRegex(@"zingmp3\.vn\/video-clip\/(.*?)\/(Z[A-Z0-9]{7})\.html", RegexOptions.Compiled)]
         private static partial Regex VideoUrlRegex();
-        internal static Regex VideoUrl => VideoUrlRegex();
+        internal static  Regex VideoUrl => VideoUrlRegex();
 
         [GeneratedRegex(@"^Z[A-Z0-9]{7}$", RegexOptions.Compiled)]
         private static partial Regex VideoIDRegex();

@@ -22,7 +22,7 @@ namespace ZingMP3Explode.Net
     /// </summary>
     public class ZingMP3APIClient
     {
-        ZingMP3Client zClient;
+        readonly ZingMP3Client zClient;
         HttpClient http => zClient.HttpClient;
 
         internal ZingMP3APIClient(ZingMP3Client client)
@@ -45,10 +45,7 @@ namespace ZingMP3Explode.Net
         public async Task<Artist> GetArtistByAliasAsync(string alias, CancellationToken cancellationToken = default)
         {
             string path = "page/get/artist";
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
-            {
-                { "alias", alias }
-            };
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { { "alias", alias } };
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
             return node.Deserialize(SourceGenerationContext.Default.Artist) ?? throw new ZingMP3ExplodeException($"Cannot get artist with alias {alias}.");
         }
@@ -197,10 +194,7 @@ namespace ZingMP3Explode.Net
         {
             //string path = "page/get/song";
             string path = "song/get/info";
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
-            {
-                { "id", id }
-            };
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
             return node.Deserialize(SourceGenerationContext.Default.Song) ?? throw new ZingMP3ExplodeException($"Cannot get song with id {id}.");
         }
@@ -208,20 +202,11 @@ namespace ZingMP3Explode.Net
         public async Task<string> GetAudioStreamUrlAsync(string id, AudioQuality quality = AudioQuality.Best, CancellationToken cancellationToken = default)
         {
             string path = "song/get/streaming";
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
-            {
-                { "id", id }
-            };
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
-            string normalQuality = "";
-            string highQuality = "";
-            string losslessQuality = "";
-            if (node.AsObject().ContainsKey("128"))
-                normalQuality = node["128"].GetStringValue();
-            if (node.AsObject().ContainsKey("320"))
-                highQuality = node["320"].GetStringValue();
-            if (node.AsObject().ContainsKey("lossless"))
-                losslessQuality = node["lossless"].GetStringValue();
+            string normalQuality = node["128"].GetStringValue();
+            string highQuality = node["320"].GetStringValue();
+            string losslessQuality = node["lossless"].GetStringValue();
             if (quality == AudioQuality.Best)
             {
                 if (!string.IsNullOrEmpty(losslessQuality))
@@ -244,10 +229,7 @@ namespace ZingMP3Explode.Net
         public async Task<Dictionary<AudioQuality, string>> GetAllAudioStreamUrlsAsync(string id, CancellationToken cancellationToken = default)
         {
             string path = "song/get/streaming";
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
-            {
-                { "id", id }
-            };
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
             Dictionary<AudioQuality, string> result = [];
             if (node.AsObject().ContainsKey("128"))
@@ -262,10 +244,7 @@ namespace ZingMP3Explode.Net
         public async Task<LyricData> GetLyricsAsync(string id, CancellationToken cancellationToken = default)
         {
             string path = "lyric/get/lyric";
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
-            {
-                { "id", id }
-            };
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
             LyricData lyricData = node.Deserialize(SourceGenerationContext.Default.LyricData) ?? throw new ZingMP3ExplodeException($"Cannot get lyrics of song with id {id}.");
             if (lyricData.File is not null)
@@ -289,12 +268,6 @@ namespace ZingMP3Explode.Net
             JsonNode node = await SendGetAndCheckErrorCode(path, null, cancellationToken);
             return node.Deserialize(SourceGenerationContext.Default.CurrentUser) ?? throw new ZingMP3ExplodeException("Cannot get current user.");
         }
-
-        //https://zingmp3.vn/api/v2/user/assets/get/assets?...
-        //https://zingmp3.vn/api/v2/user/sync/get/data?...
-        //https://zingmp3.vn/api/v2/user/song/get/counter?...
-        //https://zingmp3.vn/api/v2/user/recent-play-home?...
-        //https://zingmp3.vn/api/v2/user/mymusic/get/overview?...
 
         public async IAsyncEnumerable<Song> GetMyFavoriteSongsAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
@@ -442,10 +415,7 @@ namespace ZingMP3Explode.Net
         public async Task<Video> GetVideoAsync(string id, CancellationToken cancellationToken = default)
         {
             string path = "page/get/video";
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
-            {
-                { "id", id }
-            };
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
             return node.Deserialize(SourceGenerationContext.Default.Video) ?? throw new ZingMP3ExplodeException($"Cannot get video with id {id}.");
         }
@@ -453,12 +423,42 @@ namespace ZingMP3Explode.Net
         public async Task<List<PageSection<Video>>> GetVideoRelatedSectionsAsync(string id, CancellationToken cancellationToken = default)
         {
             string path = "video/get/section-relate";
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
-            {
-                { "id", id }
-            };
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { { "id", id } };
             JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
             return node.Deserialize(SourceGenerationContext.Default.ListPageSectionVideo) ?? throw new ZingMP3ExplodeException($"Cannot get related section of video with id {id}.");
+        }
+
+        public async Task<CurrentUserAssets> GetCurrentUserAssetsAsync(CancellationToken cancellationToken = default)
+        {
+            string path = "user/assets/get/assets";
+            JsonNode node = await SendGetAndCheckErrorCode(path, null, cancellationToken);
+            return node.Deserialize(SourceGenerationContext.Default.CurrentUserAssets) ?? throw new ZingMP3ExplodeException("Cannot get current user assets.");
+        }
+
+        public async Task<List<Song>> GetSongsRecommendationsAsync(int count, CancellationToken cancellationToken = default)
+        {
+            string path = "song/get/section-song-station";
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { { "count", count } };
+            JsonNode node = await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
+            return node["items"]?.Deserialize(SourceGenerationContext.Default.ListSong) ?? throw new ZingMP3ExplodeException("Cannot get song recommendations.");
+        }
+
+        public async Task<List<Album>> GetRecentAlbumsAsync(CancellationToken cancellationToken = default)
+        {
+            string path = "user/recent-play-home";
+            JsonNode node = await SendGetAndCheckErrorCode(path, null, cancellationToken);
+            return node.Deserialize(SourceGenerationContext.Default.ListAlbum) ?? throw new ZingMP3ExplodeException("Cannot get recent albums.");
+        }
+
+        ////https://zingmp3.vn/api/v2/page/get/chart-home?...
+        //public async Task<...> GetCurrentZingChartAsync(CancellationToken cancellationToken = default)
+        //{
+
+        //}
+
+        public async Task<JsonNode> CallAPIAsync(string path, Dictionary<string, object>? parameters, CancellationToken cancellationToken = default)
+        {
+            return await SendGetAndCheckErrorCode(path, parameters, cancellationToken);
         }
 
         async Task<JsonNode> SendGetAndCheckErrorCode(string path, Dictionary<string, object>? parameters, CancellationToken cancellationToken)

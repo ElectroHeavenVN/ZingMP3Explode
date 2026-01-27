@@ -41,11 +41,6 @@ namespace ZingMP3Explode.Utilities
                 $"Chrome/{major}.0.{build}.{branchBuild} Safari/537.36 Edg/{major}.0.{build}.{branchBuild}";
         }
 
-        //latest version available at: https://github.com/zmp3-pc/zmp3-pc/releases
-        //WHY do they host the binary on GitHub when they clearly can afford their own CDN?
-        //Also, zmp3-pc is a personal account, not an organization.
-        static string ZingMP3ClientUserAgent() => "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) zmp3/1.2.0 Chrome/102.0.5005.167 Electron/19.1.9 Safari/537.36";
-
         internal static string RandomUserAgent()
         {
             var rand = random.Next(99) + 1;
@@ -55,7 +50,7 @@ namespace ZingMP3Explode.Utilities
                 return MicrosoftEdgeUserAgent();
             else if (rand <= 95)
                 return FirefoxUserAgent();
-            return ZingMP3ClientUserAgent();
+            return Constants.ZING_MP3_DESKTOP_CLIENT_UA;
         }
         #endregion
 
@@ -100,15 +95,18 @@ namespace ZingMP3Explode.Utilities
 
         internal static string ChainParams(Dictionary<string, object> parameters)
         {
-            string urlParam = "";
+            StringBuilder urlParam = new StringBuilder();
             foreach (var param in parameters)
             {
                 string key = param.Key;
                 string value = param.Value.ToString()!;
-                urlParam += key + "=" + Uri.EscapeDataString(value) + "&";
+                urlParam.Append(key);
+                urlParam.Append('=');
+                urlParam.Append(Uri.EscapeDataString(value));
+                urlParam.Append('&');
             }
-            urlParam = urlParam.Remove(urlParam.Length - 1);
-            return urlParam;
+            urlParam.Remove(urlParam.Length - 1, 1);
+            return urlParam.ToString();
         }
 
         internal static void CheckErrorCode(string json, out JsonNode node)

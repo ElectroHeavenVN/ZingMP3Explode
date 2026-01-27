@@ -8,6 +8,7 @@
     {
         /// <summary>
         /// <para xml:lang="en">The ID of the object.</para>
+        /// <para xml:lang="vi">ID của đối tượng.</para>
         /// </summary>
         public string ID { get; }
     }
