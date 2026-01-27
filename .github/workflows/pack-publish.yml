@@ -53,9 +53,6 @@ jobs:
         run: |
           if ($env:SNK_BASE64 -and $env:SNK_BASE64 -ne '') {
             [System.IO.File]::WriteAllBytes("ZingMP3Explode.snk", [System.Convert]::FromBase64String($env:SNK_BASE64))
-            Write-Host "Created ZingMP3Explode.snk from secret"
-          } else {
-            Write-Host "SNK secret not set — skipping file creation"
           }
       - name: Create packages
         run: >
@@ -84,21 +81,9 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 8.0.x
-      - name: Download packages
+      - name: Download artifact
         uses: actions/download-artifact@v7
         with:
-          name: packages
-      - name: Download symbols
-        uses: actions/download-artifact@v7
-        with:
-          name: symbols
+          path: ./artifacts
       - name: Push packages
-        run: >
-          dotnet nuget push **/*.nupkg
-          --source "https://api.nuget.org/v3/index.json"
-          --api-key ${{ secrets.NUGET_API_KEY }}
-      - name: Push package symbols
-        run: >
-          dotnet nuget push **/*.snupkg
-          --source "https://api.nuget.org/v3/index.json"
-          --api-key ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push "artifacts/*" --skip-duplicate -s "https://api.nuget.org/v3/index.json" -k ${{ secrets.NUGET_API_KEY }}
