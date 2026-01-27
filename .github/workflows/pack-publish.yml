@@ -13,17 +13,20 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Create Strong Name Key file
-        if: ${{ secrets.SNK_BASE64 != '' }}
+        env:
+          SNK_BASE64: ${{ secrets.SNK_BASE64 }}
         run: |
-          $base64 = "${{ secrets.SNK_BASE64 }}"
-          [System.IO.File]::WriteAllBytes("ZingMP3Explode.snk", [System.Convert]::FromBase64String($base64))
+          if ($env:SNK_BASE64 -and $env:SNK_BASE64 -ne '') {
+            [System.IO.File]::WriteAllBytes("ZingMP3Explode.snk", [System.Convert]::FromBase64String($env:SNK_BASE64))
+          }
       - name: Build
         shell: powershell
+        env:
+          SNK_BASE64: ${{ secrets.SNK_BASE64 }}
         run: |
-          if ('${{ secrets.SNK_BASE64 }}' -ne '') {
+          if ($env:SNK_BASE64 -and $env:SNK_BASE64 -ne '') {
             dotnet build --no-restore
           } else {
-            Write-Host "SNK secret not available — building without strong-name signing"
             dotnet build --no-restore -p:SignAssembly=false
           }
 
@@ -43,9 +46,15 @@ jobs:
         id: get_version
         uses: battila7/get-version-action@v2
       - name: Create Strong Name Key file
+        env:
+          SNK_BASE64: ${{ secrets.SNK_BASE64 }}
         run: |
-          $base64 = "${{ secrets.SNK_BASE64 }}"
-          [System.IO.File]::WriteAllBytes("ZingMP3Explode.snk", [System.Convert]::FromBase64String($base64))
+          if ($env:SNK_BASE64 -and $env:SNK_BASE64 -ne '') {
+            [System.IO.File]::WriteAllBytes("ZingMP3Explode.snk", [System.Convert]::FromBase64String($env:SNK_BASE64))
+            Write-Host "Created ZingMP3Explode.snk from secret"
+          } else {
+            Write-Host "SNK secret not set — skipping file creation"
+          }
       - name: Create packages
         run: >
           dotnet pack
