@@ -82,6 +82,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v7
         with:
+          name: packages
           path: ./artifacts
       - name: Push packages
         run: dotnet nuget push "artifacts/*" --skip-duplicate -s "https://api.nuget.org/v3/index.json" -k ${{ secrets.NUGET_API_KEY }}
