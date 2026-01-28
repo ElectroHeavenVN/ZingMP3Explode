@@ -64,12 +64,10 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: packages
-          path: "**/*.nupkg"
-      - name: Upload package symbols
-        uses: actions/upload-artifact@v6
-        with:
-          name: symbols
-          path: "**/*.snupkg"
+          path: |
+              ZingMP3Explode/bin/Release/*.nupkg
+              ZingMP3Explode/bin/Release/*.snupkg
+          if-no-files-found: error
 
   deploy:
     runs-on: windows-latest
