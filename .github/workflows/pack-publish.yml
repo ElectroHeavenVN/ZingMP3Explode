@@ -61,7 +61,7 @@ jobs:
           -p:ContinuousIntegrationBuild=true
           -c Release
       - name: Upload packages
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: packages
           path: |
@@ -80,7 +80,7 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Download artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: packages
       - name: Push packages
