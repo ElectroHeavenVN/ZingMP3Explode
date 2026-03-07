@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 using ZingMP3Explode.Interfaces;
+using ZingMP3Explode.Utilities;
 
 namespace ZingMP3Explode.Entities
 {
@@ -53,6 +54,13 @@ namespace ZingMP3Explode.Entities
         /// </summary>
         [JsonInclude, JsonPropertyName("link")]
         public string Url { get; internal set; } = "";
+
+        /// <summary>
+        /// <para xml:lang="en">The full URL of the list.</para>
+        /// <para xml:lang="vi">URL đầy đủ của danh sách.</para>
+        /// </summary>
+        [JsonIgnore]
+        public string FullUrl => Constants.ZINGMP3_LINK.TrimEnd('/') + Url;
 
         /// <summary>
         /// <para xml:lang="en">Indicates if this list is indie.</para>

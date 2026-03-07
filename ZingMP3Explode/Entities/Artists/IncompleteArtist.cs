@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using ZingMP3Explode.Interfaces;
+using ZingMP3Explode.Utilities;
 
 namespace ZingMP3Explode.Entities
 {
@@ -88,5 +89,12 @@ namespace ZingMP3Explode.Entities
         /// </summary>
         [JsonInclude, JsonPropertyName("totalFollow")]
         public long TotalFollow { get; internal set; }
+
+        /// <summary>
+        /// <para xml:lang="en">The full URL of the artist page.</para>
+        /// <para xml:lang="vi">URL đầy đủ của trang nghệ sĩ.</para>
+        /// </summary>
+        [JsonIgnore]
+        public string FullUrl => Constants.ZINGMP3_LINK.TrimEnd('/') + Url;
     }
 }

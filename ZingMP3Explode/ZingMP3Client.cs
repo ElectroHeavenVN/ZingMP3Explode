@@ -176,8 +176,7 @@ namespace ZingMP3Explode
             Match match = Regexes.MainMinJS.Match(html);
             Version = match.Groups[1].Value;
             string mainMinJSUrl = match.Value;
-            //HttpClient client = new HttpClient(new HttpClientHandler() { AutomaticDecompression = Utils.GetDecompressionMethods() }, true);
-            HttpClient client = HttpClient;
+            HttpClient client = new HttpClient(new HttpClientHandler() { AutomaticDecompression = Utils.GetDecompressionMethods() }, true);
             client.DefaultRequestHeaders.Referrer = new Uri(Constants.ZINGMP3_LINK);
             httpResponse = await client.GetAsync(mainMinJSUrl, cancellationToken);
             if (!httpResponse.IsSuccessStatusCode)
