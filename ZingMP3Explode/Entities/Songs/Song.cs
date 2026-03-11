@@ -152,7 +152,7 @@ namespace ZingMP3Explode.Entities
         /// <para xml:lang="en">The release date of the song in UTC.</para>
         /// <para xml:lang="vi">Ngày phát hành của bài hát theo UTC.</para>
         /// </summary>
-        public DateTime ReleaseDateUTC => DateTimeOffset.FromUnixTimeSeconds(releaseDateUnix).DateTime;
+        public DateTime ReleaseDateUTC => DateTimeOffset.FromUnixTimeSeconds(releaseDateUnix).UtcDateTime;
 
         [JsonInclude, JsonPropertyName("genreIds")]
         internal List<string> genreIDs { get; set; } = [];

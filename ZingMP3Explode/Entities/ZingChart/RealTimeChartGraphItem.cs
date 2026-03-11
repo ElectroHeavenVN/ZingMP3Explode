@@ -19,7 +19,7 @@ namespace ZingMP3Explode.Entities
         /// <para xml:lang="vi">Thời gian của giá trị đồ thị.</para>
         /// </summary>
         [JsonIgnore]
-        public DateTime Time => DateTimeOffset.FromUnixTimeSeconds(timeUnix).UtcDateTime;
+        public DateTime Time => DateTimeOffset.FromUnixTimeMilliseconds(timeUnix).UtcDateTime;
 
         /// <summary>
         /// <para xml:lang="en">Hour of the graph item.</para>
