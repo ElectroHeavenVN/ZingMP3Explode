@@ -182,8 +182,8 @@ namespace ZingMP3Explode
             if (!httpResponse.IsSuccessStatusCode)
                 throw new ZingMP3ExplodeException($"Failed to fetch main.min.js. Status code: {httpResponse.StatusCode}");
             string mainMinJS = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            int startIndex = mainMinJS.IndexOf("\"NON_LOGGED_ADD_RECENT_PLAYLIST\"");
-            mainMinJS = mainMinJS.Substring(startIndex, mainMinJS.IndexOf("\"STORAGE_ADD_SONG\"") - startIndex);
+            int startIndex = mainMinJS.IndexOf("publicKey:\"");
+            mainMinJS = mainMinJS.Substring(Math.Max(0, startIndex - 200), 400);
             Match apiKeyAndSecretMatch = Regexes.ApiKeySecret.Match(mainMinJS);
             APIKey = apiKeyAndSecretMatch.Groups[1].Value;
             Secret = apiKeyAndSecretMatch.Groups[2].Value;
