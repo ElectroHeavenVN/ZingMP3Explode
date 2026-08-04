@@ -73,6 +73,7 @@ jobs:
     runs-on: windows-latest
     permissions:
       actions: read
+      id-token: write
     needs: pack
     steps:
       - name: Install .NET
@@ -83,7 +84,12 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: packages
+      - name: NuGet login
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ElectroHeavenVN
       - name: Push packages
         run: |
-            dotnet nuget push **/*.nupkg --skip-duplicate -s "https://api.nuget.org/v3/index.json" -k ${{ secrets.NUGET_API_KEY }}
-            dotnet nuget push **/*.snupkg --skip-duplicate -s "https://api.nuget.org/v3/index.json" -k ${{ secrets.NUGET_API_KEY }}
+            dotnet nuget push **/*.nupkg --skip-duplicate -s "https://api.nuget.org/v3/index.json" -k ${{steps.login.outputs.NUGET_API_KEY}}
+            dotnet nuget push **/*.snupkg --skip-duplicate -s "https://api.nuget.org/v3/index.json" -k ${{steps.login.outputs.NUGET_API_KEY}}
