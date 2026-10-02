@@ -8,28 +8,41 @@ namespace ZingMP3Explode.Utilities
         const string MAIN_MIN_JS_REGEX_PATTERN = "https:\\/\\/zmdjs.zmdcdn.me\\/zmp3-desktop\\/v(.*?)\\/static\\/js\\/main\\.min\\.js";
         /* language=regex */
         const string APIKEY_SECRET_REGEX_PATTERN = ";var .=\"(.{32})\",.=\"(.{32})\",.=\\{publicKey:";
+        
+        //const string ALBUM_PLAYLIST_ID_REGEX_PATTERN = @"^[A-Z0-9]{8}$";
+        //const string ALBUM_URL_REGEX_PATTERN = @"zingmp3\.vn\/album\/(.*?)\/([A-Z0-9]{8})\.html";
+        //const string SHORT_ALBUM_URL_REGEX_PATTERN = @"zingmp3\.vn\/album\/(?:default\/)?([A-Z0-9]{8})\.html";
+        //const string ARTIST_URL_REGEX_PATTERN = @"zingmp3\.vn\/(?:nghe-si\/)?(.*)";
+        //const string ARTIST_GENRE_WLB_ID_REGEX_PATTERN = @"^I[A-Z0-9]{7}$";
+        //const string ARTIST_ALIAS_REGEX_PATTERN = @"^[a-zA-Z0-9.-]*$";
+        //const string PLAYLIST_URL_REGEX_PATTERN = @"zingmp3\.vn\/playlist\/(.*?)\/([A-Z0-9]{8})\.html";
+        //const string SONG_URL_REGEX_PATTERN = @"zingmp3\.vn\/bai-hat\/(.*?)\/(Z[A-Z0-9]{7})\.html";
+        //const string SHORT_SONG_URL_REGEX_PATTERN = @"zingmp3\.vn\/bai-hat\/(Z[A-Z0-9]{7})\.html";
+        //const string SONG_VIDEO_ID_REGEX_PATTERN = @"^Z[A-Z0-9]{7}$";
+        //const string VIDEO_URL_REGEX_PATTERN = @"zingmp3\.vn\/video-clip\/(.*?)\/(Z[A-Z0-9]{7})\.html";
+         
         /* language=regex */
-        const string ALBUM_PLAYLIST_ID_REGEX_PATTERN = @"^[A-Z0-9]{8}$";
+        const string ALBUM_PLAYLIST_ID_REGEX_PATTERN = @"^[A-Z0-9]{8}|[a-zA-Z0-9]{11,13}$";
         /* language=regex */
-        const string ALBUM_URL_REGEX_PATTERN = @"zingmp3\.vn\/album\/(.*?)\/([A-Z0-9]{8})\.html";
+        const string ALBUM_URL_REGEX_PATTERN = @"zingmp3\.vn\/album\/(.*?)\/([A-Z0-9]{8}|[a-zA-Z0-9]{11,13})\.html";
         /* language=regex */
-        const string SHORT_ALBUM_URL_REGEX_PATTERN = @"zingmp3\.vn\/album\/(?:default\/)?([A-Z0-9]{8})\.html";
+        const string SHORT_ALBUM_URL_REGEX_PATTERN = @"zingmp3\.vn\/album\/(?:default\/)?([A-Z0-9]{8}|[a-zA-Z0-9]{11,13})\.html";
         /* language=regex */
         const string ARTIST_URL_REGEX_PATTERN = @"zingmp3\.vn\/(?:nghe-si\/)?(.*)";
         /* language=regex */
-        const string ARTIST_GENRE_WLB_ID_REGEX_PATTERN = @"^I[A-Z0-9]{7}$";
+        const string ARTIST_GENRE_WLB_ID_REGEX_PATTERN = @"^I[A-Z0-9]{7}|[a-zA-Z0-9]{11,13}$";
         /* language=regex */
         const string ARTIST_ALIAS_REGEX_PATTERN = @"^[a-zA-Z0-9.-]*$";
         /* language=regex */
-        const string PLAYLIST_URL_REGEX_PATTERN = @"zingmp3\.vn\/playlist\/(.*?)\/([A-Z0-9]{8})\.html";
+        const string PLAYLIST_URL_REGEX_PATTERN = @"zingmp3\.vn\/playlist\/(.*?)\/([A-Z0-9]{8}|[a-zA-Z0-9]{11,13})\.html";
         /* language=regex */
-        const string SONG_URL_REGEX_PATTERN = @"zingmp3\.vn\/bai-hat\/(.*?)\/(Z[A-Z0-9]{7})\.html";
+        const string SONG_URL_REGEX_PATTERN = @"zingmp3\.vn\/bai-hat\/(.*?)\/(Z[A-Z0-9]{7}|[a-zA-Z0-9]{11,13})\.html";
         /* language=regex */
-        const string SHORT_SONG_URL_REGEX_PATTERN = @"zingmp3\.vn\/bai-hat\/(Z[A-Z0-9]{7})\.html";
+        const string SHORT_SONG_URL_REGEX_PATTERN = @"zingmp3\.vn\/bai-hat\/(Z[A-Z0-9]{7}|[a-zA-Z0-9]{11,13})\.html";
         /* language=regex */
-        const string SONG_VIDEO_ID_REGEX_PATTERN = @"^Z[A-Z0-9]{7}$";
+        const string SONG_VIDEO_ID_REGEX_PATTERN = @"^Z[A-Z0-9]{7}|[a-zA-Z0-9]{11,13}$";
         /* language=regex */
-        const string VIDEO_URL_REGEX_PATTERN = @"zingmp3\.vn\/video-clip\/(.*?)\/(Z[A-Z0-9]{7})\.html";
+        const string VIDEO_URL_REGEX_PATTERN = @"zingmp3\.vn\/video-clip\/(.*?)\/(Z[A-Z0-9]{7}|[a-zA-Z0-9]{11,13})\.html";
 
 #if NET7_0_OR_GREATER
         [GeneratedRegex(MAIN_MIN_JS_REGEX_PATTERN, RegexOptions.Compiled)]
